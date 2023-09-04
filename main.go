@@ -18,6 +18,7 @@ func main() {
 	td := app.TodoHandler{Service: services.NewTodoService(TodoRepositoryDB)}
 
 	appRoute.Post("/api/todo", td.CreateTodo)
+	appRoute.Get("/api/todos", td.GetAllTodo)
 
 	err := appRoute.Listen(":8080")
 	if err != nil {
