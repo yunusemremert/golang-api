@@ -15,12 +15,6 @@ func ConnectMongoDB() *mongo.Client {
 		panic(err)
 	}
 
-	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
-
 	if err := client.Database("books").RunCommand(context.TODO(), bson.D{{"ping", 1}}).Err(); err != nil {
 		panic(err)
 	}
@@ -29,8 +23,6 @@ func ConnectMongoDB() *mongo.Client {
 
 	return client
 }
-
-var MongoDB = ConnectMongoDB()
 
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
 	return client.Database("books").Collection(collectionName)
