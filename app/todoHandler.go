@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang-api/models"
 	"golang-api/services"
 	"net/http"
@@ -33,4 +34,16 @@ func (h TodoHandler) GetAllTodo(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusOK).JSON(result)
+}
+
+func (h TodoHandler) DeleteTodo(c *fiber.Ctx) error {
+	query := c.Params("id")
+	cnv, _ := primitive.ObjectIDFromHex(query)
+
+	result, err := h.Service.TodoDelete(cnv)
+	if err != nil || result == false {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"State": false})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{"State": true})
 }
