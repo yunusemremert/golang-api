@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang-api/models"
 	"time"
@@ -20,8 +21,10 @@ func (t TodoRepositoryDB) Insert(todo models.Todo) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	todo.Id = primitive.NewObjectID()
+
 	result, err := t.TodoCollection.InsertOne(ctx, todo)
-	if result.InsertedID != nil || err != nil {
+	if result.InsertedID == nil || err != nil {
 		err := errors.New("failed add")
 		if err != nil {
 			return false, err
