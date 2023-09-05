@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+//go:generate mockgen -destination=../mocks/repository/mockTodoRepository.go -package=repository golang-api/repository TodoRepository
 type TodoRepositoryDB struct {
 	TodoCollection *mongo.Collection
 }
